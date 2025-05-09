@@ -23,31 +23,36 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
         String usuarioGuardado = preferences.getString("usuario", null);
         if (usuarioGuardado != null) {
-            startActivity(new Intent(this, Segunda_pantalla.class));
+            // Si hay usuario guardado, va directo al MainActivity
+            startActivity(new Intent(this, MainActivity.class));
             finish();
             return;
         }
 
         setContentView(R.layout.activity_login);
+
         edtUsuario = findViewById(R.id.edtUsuario);
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
-        btnLogin.setOnClickListener(v -> {
-            String usuario = edtUsuario.getText().toString().trim();
-            String password = edtPassword.getText().toString().trim();
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String usuario = edtUsuario.getText().toString().trim();
+                String password = edtPassword.getText().toString().trim();
 
-            if (usuario.isEmpty() || password.isEmpty()) {
-                Toast.makeText(LoginActivity.this, "Por favor llenar los campos", Toast.LENGTH_LONG).show();
-            } else if (!usuario.equals("uac123") || !password.equals("12345678")) {
-                Toast.makeText(LoginActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
-            } else {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("usuario", usuario);
-                editor.apply();
+                if (usuario.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Por favor llenar los campos", Toast.LENGTH_LONG).show();
+                } else if (!usuario.equals("uac123") || !password.equals("12345678")) {
+                    Toast.makeText(LoginActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_LONG).show();
+                } else {
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("usuario", usuario);
+                    editor.apply();
 
-                startActivity(new Intent(LoginActivity.this, Segunda_pantalla.class));
-                finish();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                }
             }
         });
     }
